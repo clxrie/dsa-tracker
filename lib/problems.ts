@@ -34,7 +34,7 @@ export const problems: Problem[] = [
     pattern: "Arrays & Hashing",
     myDifficulty: 4,
     link: "https://leetcode.com/submissions/detail/2167337041/",
-    dateSolved: "2026-10-8",
+    dateSolved: "2026-10-08",
     stuckOn: "how to solve the back and forth problem",
     solutionLink: "example.com",
     notes : "confused on the first take",
