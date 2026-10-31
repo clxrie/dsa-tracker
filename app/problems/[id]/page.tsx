@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { problems } from "@/lib/problems";
+import Link from "next/link";
 
 export default async function ProblemDetailPage({
   params,
@@ -14,7 +15,7 @@ export default async function ProblemDetailPage({
     }
     return(
         <div>
-            <p>Problem name: {problem.name}</p>
+            <Link href={`/problem/${problem.id}`}>{problem.name}</Link>
             <p>Pattern: {problem.pattern}</p>
             <p>Difficulty:{problem.myDifficulty}/5</p>
             <p>Status : {problem.status}</p>

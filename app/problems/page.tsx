@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Problem, problems } from "@/lib/problems";
 
 export default function ProblemsPage(){
@@ -6,8 +7,8 @@ export default function ProblemsPage(){
             <h1>All problems</h1>
             <ul>
                 {problems.map((problem) => 
-                    <li>
-                        {problem.name} -- {problem.status}
+                    <li key={problem.id}>
+                        <Link href={`/problems/${problem.id}`}>{problem.name}</Link> -- {problem.status}
                     </li>
                 )}
             </ul>
