@@ -1,26 +1,366 @@
 @import "tailwindcss";
 
+/* =========================================================
+   DESIGN TOKENS
+   Change a color here and it updates everywhere in the app.
+   ========================================================= */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #0b0b0c;          /* page background */
+  --surface: #141416;     /* cards, rows, inputs */
+  --surface-2: #1c1c1f;   /* hover / buttons */
+  --border: #2a2a2f;
+  --text: #ececec;
+  --muted: #8b8b93;       /* labels, secondary text */
+  --accent: #c6f432;      /* lime */
+  --accent-ink: #0b0b0c;  /* text ON lime */
+  --revisit: #f5a524;     /* amber for "revisit" */
+  --radius: 12px;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;     /* makes the date picker dark too */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0 0 24px;
+}
+
+/* =========================================================
+   APP SHELL: sidebar on the left, page on the right
+   ========================================================= */
+.shell {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  border-right: 1px solid var(--border);
+  padding: 24px 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.logo {
+  font-family: var(--mono);
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 32px;
+  padding: 0 12px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav a {
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  color: var(--muted);
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.nav a:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.main {
+  padding: 40px;
+  max-width: 900px;
+  width: 100%;
+}
+
+/* =========================================================
+   SMALL TEXT STYLES
+   ========================================================= */
+.eyebrow,
+.label {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+
+/* adds "// " in front of every eyebrow, like a code comment */
+.eyebrow::before {
+  content: "// ";
+}
+
+/* =========================================================
+   DASHBOARD: stat cards
+   ========================================================= */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.stat-value {
+  font-family: var(--mono);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 4px 0 0;
+}
+
+.stat-accent {
+  border-color: var(--accent);
+}
+
+.stat-accent .stat-value {
+  color: var(--accent);
+}
+
+/* =========================================================
+   PROBLEM LIST: one row per problem
+   ========================================================= */
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+.row:hover {
+  border-color: var(--muted);
+}
+
+.row-name {
+  flex: 1;
+  min-width: 160px;
+  font-weight: 600;
+}
+
+.row-name:hover {
+  color: var(--accent);
+}
+
+/* little pill, e.g. "Two Pointers" */
+.tag {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+
+/* [SOLVED] / [REVISIT] */
+.badge {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.badge-solved {
+  color: var(--accent);
+}
+
+.badge-revisit {
+  color: var(--revisit);
+}
+
+/* =========================================================
+   DETAIL PAGE
+   ========================================================= */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.card p {
+  margin: 0;
+}
+
+.card .label {
+  margin-bottom: 8px;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+.btn {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  border-color: var(--muted);
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+.btn-accent:hover {
+  filter: brightness(1.1);
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* the label text above each box */
+.field > span {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* makes a field take the full width (both columns) */
+.full {
+  grid-column: 1 / -1;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.form .btn {
+  justify-self: start;
+}
+
+/* =========================================================
+   PHONE: sidebar becomes a top bar, form becomes 1 column
+   ========================================================= */
+@media (max-width: 720px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .logo {
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .main {
+    padding: 24px 16px;
+  }
+
+  .form {
+    grid-template-columns: 1fr;
+  }
 }
